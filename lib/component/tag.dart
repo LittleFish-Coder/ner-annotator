@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ner_annotator/page/home_page.dart';
 
-import '../model/label.dart';
-
 StateProvider<bool> isSelectedProvider = StateProvider<bool>((ref) => false);
 
 class Tag extends ConsumerWidget {
@@ -20,8 +18,8 @@ class Tag extends ConsumerWidget {
       padding: const EdgeInsets.all(5),
       child: InkWell(
         onTap: () {
+          ref.read(currTagProvider.notifier).state = Tag(tagName: tagName, color: color, index: index);
           ref.read(tagsProvider.notifier).onSelected(index);
-          // ref.read(selectedProvider.notifier).state = !ref.read(selectedProvider.notifier).state;
         },
         child: Container(
           width: 100,

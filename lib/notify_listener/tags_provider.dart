@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ner_annotator/model/label.dart';
+import 'package:ner_annotator/page/home_page.dart';
 
 class TagsProvider extends StateNotifier<List<Label?>> {
   final Ref ref;
@@ -9,6 +10,7 @@ class TagsProvider extends StateNotifier<List<Label?>> {
   void onSelected(int index) {
     if (state[index]!.selected == true) {
       state[index]!.selected = !state[index]!.selected;
+      ref.read(currTagProvider.notifier).state = null;
     } else {
       state.forEach((element) {
         element!.selected = false;
