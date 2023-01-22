@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ner_annotator/component/tag.dart';
@@ -11,12 +14,15 @@ final tagsProvider = StateNotifierProvider<TagsProvider, List<Label?>>((ref) {
   return TagsProvider(ref);
 });
 
-final StateProvider<String> currHighlightProvider = StateProvider<String>((ref) => "");
+final StateProvider<String> currHighlightProvider =
+    StateProvider<String>((ref) => "");
 
-final StateProvider<TextSelection?> positionProvider = StateProvider<TextSelection?>((ref) => null);
+final StateProvider<TextSelection?> positionProvider =
+    StateProvider<TextSelection?>((ref) => null);
 
-final StateNotifierProvider<NewsProvider, List<TextSpan>> newsProvider = StateNotifierProvider((ref) {
-  return NewsProvider([TextSpan(text: fakeNews)]);
+final StateNotifierProvider<NewsProvider, List<TextSpan>> newsProvider =
+    StateNotifierProvider((ref) {
+  return NewsProvider([const TextSpan(text: fakeNews)]);
 });
 
 class HomePage extends ConsumerWidget {
@@ -27,9 +33,9 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("NCKU NER Annotator")),
       body: Column(
-        children: <Widget>[
-          const Header(),
-          const Divider(),
+        children: const <Widget>[
+          Header(),
+          Divider(),
           Expanded(child: TextBody()),
         ],
       ),
@@ -69,25 +75,37 @@ class TextBody extends ConsumerWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: SingleChildScrollView(
-        child: SelectableText.rich(
-          TextSpan(children: [
-            for (TextSpan textSpan in newsContent) textSpan,
-          ]),
-          onSelectionChanged: (TextSelection selection, SelectionChangedCause? cause) {
-            if (cause == SelectionChangedCause.drag) {
-              ref.read(positionProvider.notifier).state = selection;
-              final subString = fakeNews.substring(selection.start, selection.end);
-              ref.read(currHighlightProvider.notifier).state = subString;
-            }
-          },
-          onTap: () {
-            print("currHighlight: $currHighlight");
-            // print("position $position");
-            if (currTag != null) {
-              ref.read(newsProvider.notifier).highlight(position!, currHighlight, currTag.color);
-              ref.read(currHighlightProvider.notifier).state = "";
-            }
-          },
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Listener(
+            onPointerDown: (event) {
+              debugPrint("down");
+            },
+            onPointerUp: ((event) {
+              if (currTag != null) {
+                ref.read(newsProvider.notifier).highlight(position!, currHighlight, currTag.color);
+                ref.read(currHighlightProvider.notifier).state = "";
+              }
+              debugPrint("up");
+            }),
+            child: SelectableText.rich(
+              TextSpan(
+                children: [
+                  for (TextSpan textSpan in newsContent) textSpan,
+                ],
+              ),
+              onSelectionChanged:
+                  (TextSelection selection, SelectionChangedCause? cause) {
+                if (cause == SelectionChangedCause.drag) {
+                  ref.read(positionProvider.notifier).state = selection;
+                  final subString =
+                      fakeNews.substring(selection.start, selection.end);
+                  ref.read(currHighlightProvider.notifier).state = subString;
+                  debugPrint("currHighlight: $currHighlight");
+                }
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -102,7 +120,8 @@ Widget footer() {
       alignment: Alignment.center,
       widthFactor: 1.0,
       heightFactor: 1.0,
-      child: Text('This website is designed for NCKU Miin Wu School of Computing'),
+      child:
+          Text('This website is designed for NCKU Miin Wu School of Computing'),
     ),
   );
 }

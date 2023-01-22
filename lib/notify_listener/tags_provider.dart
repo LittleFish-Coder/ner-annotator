@@ -12,9 +12,9 @@ class TagsProvider extends StateNotifier<List<Label?>> {
       state[index]!.selected = !state[index]!.selected;
       ref.read(currTagProvider.notifier).state = null;
     } else {
-      state.forEach((element) {
+      for (var element in state) {
         element!.selected = false;
-      });
+      }
       state[index]!.selected = !state[index]!.selected;
     }
     state = [...state];
