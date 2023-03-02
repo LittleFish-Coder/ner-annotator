@@ -1,6 +1,3 @@
-import 'dart:html';
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ner_annotator/component/tag.dart';
@@ -54,7 +51,7 @@ class Header extends ConsumerWidget {
       children: [
         for (int index = 0; index < tagList.length; index++)
           Tag(
-            tagName: tagList[index]!.tagName,
+            tagName: tagList[index]!.labelName,
             color: tagList[index]!.color,
             index: index,
           ),

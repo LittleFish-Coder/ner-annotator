@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "name": "PERSON",
+        "color": "000000"
+    },
+    {
+        "id": 2,
+        "name": "COUNTRY",
+        "color": "336666"
+    }
+]

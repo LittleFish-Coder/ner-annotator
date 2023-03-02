@@ -2,7 +2,7 @@ import 'dart:ui';
 
 class Label {
   bool selected;
-  String tagName;
+  String labelName;
   Color color;
-  Label(this.selected, this.tagName, this.color);
+  Label(this.selected, this.labelName, this.color);
 }
